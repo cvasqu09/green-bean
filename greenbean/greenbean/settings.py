@@ -76,6 +76,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'greenbean.wsgi.application'
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000"
+]
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

@@ -6,5 +6,5 @@ from backend.serializers import PlantSerializer
 
 class PlantViewSet(ModelViewSet):
     queryset = Plant.objects.filter()
-    http_method_names = ['get', 'post']
+    http_method_names = ['get', 'post', 'delete']
     serializer_class = PlantSerializer

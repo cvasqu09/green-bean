@@ -18,9 +18,10 @@ import InputText from "primevue/inputtext";
 import InputNumber from "primevue/inputnumber";
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
-import ConfirmationService from "primevue/confirmationservice";
 import ConfirmDialog from "primevue/confirmdialog";
-import { createPinia, PiniaVuePlugin } from 'pinia'
+import { createPinia } from 'pinia'
+import ToastService from "primevue/toastservice";
+import ConfirmationService from "primevue/confirmationservice";
 
 import routes from './routes';
 
@@ -48,5 +49,7 @@ app.component("Column", Column);
 app.component("ConfirmDialog", ConfirmDialog);
 
 app.use(PrimeVue)
+app.use(ToastService)
+app.use(ConfirmationService)
 app.use(pinia)
 app.mount('#app')
