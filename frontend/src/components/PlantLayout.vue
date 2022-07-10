@@ -40,10 +40,11 @@ export default {
       }
       return result;
     }
+
     return {
       itemTitle,
       layout: [
-        {"x": 0, "y": 0, "w": 2, "h": 2, "i": "0", static: false},
+        {"x": 0, "y": 0, "w": 2, "h": 2, "i": 0, static: false},
         {"x": 2, "y": 0, "w": 2, "h": 4, "i": "1", static: false},
         {"x": 4, "y": 0, "w": 2, "h": 5, "i": "2", static: false},
         {"x": 6, "y": 0, "w": 2, "h": 3, "i": "3", static: false},
@@ -74,6 +75,5 @@ export default {
 
 <style scoped>
 .vue-grid-layout {
-  background: green;
 }
 </style>

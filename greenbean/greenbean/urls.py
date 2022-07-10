@@ -17,10 +17,11 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from backend.viewsets import PlantViewSet
+from backend.viewsets import PlantViewSet, LayoutViewSet
 
 router = DefaultRouter()
 router.register(r'plants', PlantViewSet, basename="plants")
+router.register(r'layouts', LayoutViewSet, basename="layouts")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
