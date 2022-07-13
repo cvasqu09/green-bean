@@ -1,38 +1,68 @@
 <template>
-  <div>
+  <div class="m-2">
+    <div class="flex justify-content-between">
+      <div class="flex">
+        <IncrementButton class="mr-2" :count="rows" label="Rows"></IncrementButton>
+        <IncrementButton class="mr-2" :count="cols" label="Cols"></IncrementButton>
+        <IncrementButton :count="items" label="Items" @update="items = $event"></IncrementButton>
+      </div>
+      <Button class="align-self-center p-button-info" label="Regenerate Layout" @click="generateLayout"></Button>
+    </div>
     <grid-layout :layout="layout"
-                 :col-num="12"
-                 :row-height="30"
+                 :col-num="cols"
+                 :row-height="100"
+                 :max-rows="rows"
                  :is-draggable="draggable"
                  :is-resizable="resizable"
-                 :vertical-compact="true"
-                 :use-css-transforms="true">
+                 :use-css-transforms="true"
+                 :vertical-compact="false"
+                 @layout-updated="updateLayout">
       <grid-item v-for="item in layout"
+                 :key="item.i"
                  :static="item.static"
                  :x="item.x"
                  :y="item.y"
                  :w="item.w"
                  :h="item.h"
                  :i="item.i"
+                 class="flex justify-content-center"
       >
-        <span class="text">{{ itemTitle(item) }}</span>
+        <div class="flex flex-column align-self-center">
+          <InputText class="max-w-5rem align-self-center" :placeholder="itemTitle(item)"></InputText>
+          <ToggleButton :model-value="item.static" class="align-self-center" on-label="Static" off-label="Not Static"
+                        @change="item.static = !item.static"></ToggleButton>
+        </div>
       </grid-item>
     </grid-layout>
-
+    <div class="flex justify-content-end mt-2">
+      <Button class="p-button-info" icon="pi pi-save" label="Save Layout" @click="saveLayout"></Button>
+    </div>
   </div>
 </template>
 
 <script>
 import VueGridLayout from 'vue3-grid-layout';
+import {computed, onMounted, ref} from 'vue';
+import IncrementButton from "../ui/IncrementButton.vue";
+import {useLayoutStore} from "../stores/layoutStore";
+import {storeToRefs} from "pinia";
 
 export default {
   name: "PlantLayout",
   props: {},
   components: {
     GridLayout: VueGridLayout.GridLayout,
-    GridItem: VueGridLayout.GridItem
+    GridItem: VueGridLayout.GridItem,
+    IncrementButton
   },
   setup() {
+    const layoutStore = useLayoutStore();
+    const {selectedLayout} = storeToRefs(layoutStore)
+    const rows = ref(selectedLayout.layoutConfiguration?.rows || 10);
+    const cols = ref(selectedLayout.layoutConfiguration?.cols || 10);
+    const items = ref(selectedLayout.layoutConfiguration?.layoutDefinition?.length || 0);
+    const layout = ref(selectedLayout.layoutConfiguration?.layoutDefinition || []);
+
     const itemTitle = (item) => {
       let result = item.i;
       if (item.static) {
@@ -41,39 +71,65 @@ export default {
       return result;
     }
 
+    const updateLayout = (layoutUpdate) => {
+      console.log('update', layoutUpdate)
+    }
+
+    // TODO: Generate this properly
+    const generateLayout = () => {
+      console.log('items', items.value)
+      layout.value = []
+      for (let i = 0; i < items.value; i++) {
+        layout.value.push({
+          x: i,
+          y: 0,
+          w: 2,
+          h: 2,
+          i: `Item - ${i}`,
+          static: false
+        })
+      }
+      console.log(layout.value)
+
+    }
+
+    const saveLayout = async (layout) => {
+      const mappedLayout = layout.map()
+      // await layoutStore.addLayout(layout);
+    }
+
+    onMounted(() => {
+      generateLayout();
+    })
+
     return {
+      cols,
+      generateLayout,
       itemTitle,
-      layout: [
-        {"x": 0, "y": 0, "w": 2, "h": 2, "i": 0, static: false},
-        {"x": 2, "y": 0, "w": 2, "h": 4, "i": "1", static: false},
-        {"x": 4, "y": 0, "w": 2, "h": 5, "i": "2", static: false},
-        {"x": 6, "y": 0, "w": 2, "h": 3, "i": "3", static: false},
-        {"x": 8, "y": 0, "w": 2, "h": 3, "i": "4", static: false},
-        {"x": 10, "y": 0, "w": 2, "h": 3, "i": "5", static: false},
-        {"x": 0, "y": 5, "w": 2, "h": 5, "i": "6", static: false},
-        {"x": 2, "y": 5, "w": 2, "h": 5, "i": "7", static: false},
-        {"x": 4, "y": 5, "w": 2, "h": 5, "i": "8", static: false},
-        {"x": 6, "y": 3, "w": 2, "h": 4, "i": "9", static: false},
-        {"x": 8, "y": 4, "w": 2, "h": 4, "i": "10", static: false},
-        {"x": 10, "y": 4, "w": 2, "h": 4, "i": "11", static: false},
-        {"x": 0, "y": 10, "w": 2, "h": 5, "i": "12", static: false},
-        {"x": 2, "y": 10, "w": 2, "h": 5, "i": "13", static: false},
-        {"x": 4, "y": 8, "w": 2, "h": 4, "i": "14", static: false},
-        {"x": 6, "y": 8, "w": 2, "h": 4, "i": "15", static: false},
-        {"x": 8, "y": 10, "w": 2, "h": 5, "i": "16", static: false},
-        {"x": 10, "y": 4, "w": 2, "h": 2, "i": "17", static: false},
-        {"x": 0, "y": 9, "w": 2, "h": 3, "i": "18", static: false},
-        {"x": 2, "y": 6, "w": 2, "h": 2, "i": "19", static: false}
-      ],
+      layout,
       draggable: true,
       resizable: true,
-      index: 0
+      items,
+      index: 0,
+      rows,
+      saveLayout,
+      selectedLayout,
+      updateLayout,
     }
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .vue-grid-layout {
+  border: 1px solid grey;
+
+  .static {
+    position: absolute !important;
+  }
+}
+
+.test {
+  justify-content: center;
 }
 </style>

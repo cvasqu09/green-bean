@@ -8,6 +8,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import App from './App.vue'
 import PrimeVue from 'primevue/config'
 import Button from "primevue/button";
+import ToggleButton from "primevue/togglebutton";
 import Menubar from 'primevue/menubar';
 import Menu from "primevue/menu";
 import Dialog from "primevue/dialog";
@@ -36,6 +37,7 @@ app.use(router);
 
 
 app.component("Button", Button);
+app.component("ToggleButton", ToggleButton);
 app.component("Dialog", Dialog);
 app.component("Menu", Menu);
 app.component("Menubar", Menubar);

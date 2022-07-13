@@ -4,12 +4,14 @@ import { Layout } from '../constants';
 
 interface LayoutStoreState {
   layouts: Layout[]
+  selectedLayout?: Layout
 }
 
 export const useLayoutStore = defineStore('layouts', {
   state: (): LayoutStoreState => {
     return {
-      layouts: []
+      layouts: [],
+      selectedLayout: undefined,
     }
   },
   actions: {
@@ -17,7 +19,7 @@ export const useLayoutStore = defineStore('layouts', {
       const response = await httpClient.get('/layouts/')
       this.layouts = response.data
     },
-    async addLayout(layout) {
+    async addLayout(layout: Layout) {
       try {
         const response = await httpClient.post('/layouts/', layout)
         this.layouts.push(response.data)
@@ -31,6 +33,14 @@ export const useLayoutStore = defineStore('layouts', {
         this.layouts = this.layouts.filter(layout => layout.id !== layoutId)
       } catch (e) {
         throw e
+      }
+    },
+    setSelectedLayout(layoutId: string) {
+      const foundLayout = this.layouts.find(layout => layout.id === layoutId)
+      if (foundLayout) {
+        this.selectedLayout = foundLayout
+      } else {
+        throw Error('Layout not found.')
       }
     }
   }

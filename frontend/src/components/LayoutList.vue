@@ -3,6 +3,11 @@
     <DataTable :value="layouts" responsiveLayout="scroll">
       <Column field="name" header="Name"></Column>
       <Column field="date_added" header="Date Added"></Column>
+      <Column header="Edit">
+        <template #body="slotProps">
+          <Button icon="pi pi-pencil" label="Edit" @click="selectLayout(slotProps.data.id)"></Button>
+        </template>
+      </Column>
       <Column header="Delete">
         <template #body="slotProps">
           <Button icon="pi pi-trash" @click="confirmLayoutDelete(slotProps.data.id)"></Button>
@@ -58,8 +63,13 @@ export default {
       }
     }
 
+    const selectLayout = (layoutId: string) => {
+      layoutStore.setSelectedLayout(layoutId);
+    }
+
     return {
       confirmLayoutDelete,
+      selectLayout,
     }
   }
 }

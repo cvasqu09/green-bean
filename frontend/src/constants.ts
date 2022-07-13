@@ -3,7 +3,8 @@ export interface Plant {
   name: string;
   days_to_harvest: number;
 }
-export interface LayoutConfiguration {
+
+export interface LayoutItem {
   x: number;
   y: number;
   w: number;
@@ -13,8 +14,14 @@ export interface LayoutConfiguration {
   static: boolean;
 }
 
+export interface LayoutConfiguration {
+  rows: number;
+  cols: number;
+  layoutDefinition: LayoutItem[]
+}
+
 export interface Layout {
-  id: string;
+  id?: string;
   name: string;
-  configuration: LayoutConfiguration[];
+  configuration: LayoutConfiguration | {};
 }
