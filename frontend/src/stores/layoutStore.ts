@@ -27,6 +27,15 @@ export const useLayoutStore = defineStore('layouts', {
         throw e
       }
     },
+    async updateLayout(layout: Layout) {
+      try {
+        const response = await httpClient.put(`/layouts/${layout.id}/`, layout)
+        const layoutIndex = this.layouts.findIndex(layout => layout.id === response.data.id)
+        this.layouts[layoutIndex] = response.data
+      } catch(e) {
+        throw e
+      }
+    },
     async deleteLayout(layoutId: string) {
       try {
         await httpClient.delete(`/layouts/${layoutId}`)
@@ -35,12 +44,12 @@ export const useLayoutStore = defineStore('layouts', {
         throw e
       }
     },
-    setSelectedLayout(layoutId: string) {
+    setSelectedLayout(layoutId?: string) {
       const foundLayout = this.layouts.find(layout => layout.id === layoutId)
       if (foundLayout) {
         this.selectedLayout = foundLayout
       } else {
-        throw Error('Layout not found.')
+        this.selectedLayout = undefined;
       }
     }
   }

@@ -45,7 +45,7 @@ class LayoutSerializer(serializers.ModelSerializer):
                             "type": "boolean",
                             "default": False
                         },
-                        "identifier": {
+                        "i": {
                             "type": "string",
                             "default": ""
                         },
@@ -59,6 +59,7 @@ class LayoutSerializer(serializers.ModelSerializer):
         print("configuration", configuration)
         try:
             validate(configuration, self.layout_schema)
+            return configuration
         except ValidationError as e:
             raise serializers.ValidationError("Error with configuration ", e.message)
 

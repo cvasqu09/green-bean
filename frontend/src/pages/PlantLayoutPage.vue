@@ -3,7 +3,7 @@
     <h2 class="align-self-start">Layout page</h2>
     <Button class="flex align-self-end mb-2" icon="pi pi-plus" label="Add Layout" @click="toggleLayoutModal()"></Button>
     <LayoutList :layouts="layouts"></LayoutList>
-    <PlantLayout v-if="selectedLayout"></PlantLayout>
+    <PlantLayout v-if="selectedLayout" :selected-layout="selectedLayout"></PlantLayout>
   </div>
   <Dialog v-model:visible="displayModal" :modal="true">
     <template #header><h3>Add Layout</h3></template>

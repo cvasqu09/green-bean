@@ -1,3 +1,5 @@
+from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSet
 
 from backend.models import Plant, Layout
@@ -12,5 +14,5 @@ class PlantViewSet(ModelViewSet):
 
 class LayoutViewSet(ModelViewSet):
     queryset = Layout.objects.all()
-    http_method_names = ['get', 'post', 'delete']
+    http_method_names = ['get', 'post', 'put', 'delete']
     serializer_class = LayoutSerializer
